@@ -1,0 +1,132 @@
+Copy code
+#include <iostream>
+#include <chrono>
+using namespace std;
+
+// Node class to represent each node in the linked list
+class Node {
+public:
+    int data;
+    Node* next;
+    Node(int item) {
+        data = item;
+        next = nullptr;
+    }
+};
+
+// Stack class to represent the linked list implementation of a stack
+class LinkedListStack {
+private:
+    Node* top;
+
+    // variables to store total time taken for Push and Pop operations
+    long long total_push_time_;
+    long long total_pop_time_;
+
+public:
+    LinkedListStack() {
+        top = nullptr;
+        total_push_time_ = 0;
+        total_pop_time_ = 0;
+    }
+
+    // Push function to add an item to the top of the stack
+    void Push(int item) {
+        auto start_time = chrono::high_resolution_clock::now(); // record start time
+        Node* newNode = new Node(item);
+        newNode->next = top;
+        top = newNode;
+        auto end_time = chrono::high_resolution_clock::now(); // record end time
+        auto time_taken = chrono::duration_cast<chrono::nanoseconds>(end_time - start_time).count();
+        total_push_time_ += time_taken;
+        cout << "Pushed item: " << item << ", Time taken: " << time_taken << "ns" << endl;
+    }
+
+    // Pop function to remove an item from the top of the stack
+    int Pop() {
+        if (isEmpty()) {
+            cout << "Stack is empty!" << endl;
+            return -1;
+        }
+        auto start_time = chrono::high_resolution_clock::now(); // record start time
+        int item = top->data;
+        Node* temp = top;
+        top = top->next;
+        delete temp;
+        auto end_time = chrono::high_resolution_clock::now(); // record end time
+        auto time_taken = chrono::duration_cast<chrono::nanoseconds>(end_time - start_time).count();
+        total_pop_time_ += time_taken;
+        cout << "Popped item: " << item << ", Time taken: " << time_taken << "ns" << endl;
+        return item;
+    }
+
+    // Display function to show the contents of the stack
+    void Display() {
+        cout << "Stack: ";
+        Node* current = top;
+        while (current != nullptr) {
+            cout << current->data << " ";
+            current = current->next;
+        }
+        cout << endl;
+    }
+
+    // isEmpty function to check if the stack is empty
+    bool isEmpty() {
+        return top == nullptr;
+    }
+
+    // Getter function to get total time taken for Push operations
+    long long total_push_time() {
+        return total_push_time_;
+    }
+
+    // Getter function to get total time taken for Pop operations
+    long long total_pop_time() {
+        return total_pop_time_;
+    }
+
+}
+int main() {
+    LinkedListStack stack;
+
+    // Push elements onto the stack and measure time taken for each operation
+    stack.Push(8);
+    stack.Push(10);
+    stack.Push(5);
+    stack.Push(11);
+    stack.Push(15);
+    stack.Push(23);
+    stack.Push(6);
+    stack.Push(18);
+    stack.Push(20);
+    stack.Push(17);
+    stack.Display();
+
+    auto total_push_time = stack.total_push_time();
+    cout << "Total time taken for Push operations: " << total_push_time << "ns" << endl;
+
+    // Pop elements from the stack and measure time taken for each operation
+    stack.Pop();
+    stack.Pop();
+    stack.Pop();
+    stack.Pop();
+    stack.Pop();
+    stack.Display();
+
+    auto total_pop_time = stack.total_pop_time();
+    cout << "Total time taken for Pop operations: " << total_pop_time << "ns" << endl;
+
+    // Push more elements onto the stack and measure time taken for each operation
+    stack.Push(4);
+    stack.Push(30);
+    stack.Push(3);
+    stack.Push(1);
+    stack.Display();
+    
+    auto total_push_time = stack.total_push_time();
+    cout << "Total time taken for Push operations: " << total_push_time << "ns" << endl;
+
+
+    return 0;
+}
