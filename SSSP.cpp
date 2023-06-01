@@ -60,15 +60,24 @@ int main() {
     graph[5][3] = 20;
 
 
-    int startNode = 0;
-    vector<int> distances;
-    dijkstra(graph, startNode, distances);
-
+    
+    
+    
     // Printing the shortest distances from the start node
-    cout << "Shortest distances from node " << startNode << " to," << endl;
-    for (int i = 0; i < numNodes; ++i) {
-        cout << "Node " << i << ": " << distances[i] << endl;
+    for ( int startNode = 0 ; startNode < 6; startNode++){
+        vector<int> distances;
+        dijkstra(graph, startNode, distances);
+        float total = 0;
+        cout << "Shortest distances from node " << startNode << " to," << endl;
+        for (int i = 0; i < numNodes; ++i) {
+            cout << "node " << i << ": " << distances[i] << endl;
+            total = total + distances[i];
     }
-
+    //getting the avarage time
+    cout << "Average time :" << total/5 << endl;
+    cout << endl;
+    }
+     
     return 0;
 }
+
